@@ -72,17 +72,9 @@ app.bind(:unsubscribe) do |client_id, channel|
 end
 
 # disconnect - offline
-app.bind(:disconnect) do |client_id|
-  puts "Client disconnect: #{client_id}"
+app.bind(:disconnect) do |client_id, channel|
+  puts "Client disconnect: #{client_id}:#{channel}"
   # send_user_status_with_http(client_id, false)
-  if channel.split('/')[1] == "push"
-    user_id = channel.split('/').last
-    # redis.set("user_#{user_id}_online", false)
-    Thread.new do
-    	# send_user_status_with_http(user_id, false)
-      PrivatePub.publish_to "/presence", {:user_id => user_id, :online => false}
-    end
-  end
   # UnsubscribeClient.perform_async(client_id)
 end
 
