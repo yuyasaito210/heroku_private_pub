@@ -29,6 +29,7 @@ app.bind(:unsubscribe) do |client_id, channel|
   puts "Client unsubscribe: #{client_id}:#{channel}"
   if channel.split('/')[1] == "push"
     user_id = channel.split('/').last
+    puts "user_id: #{user_id}"
     Thread.new do
       PrivatePub.publish_to "/presence", {:id => user_id, :online => false}
     end
